@@ -24,24 +24,7 @@ public class RoutineManager {
         try {
             JSONArray jsonArray = new JSONArray();
             for (Routine routine : routines) {
-                JSONObject routineJson = new JSONObject();
-                routineJson.put("name", routine.getName());
-                
-                JSONArray exercisesJson = new JSONArray();
-                for (Exercise exercise : routine.getExercises()) {
-                    JSONObject exerciseJson = new JSONObject();
-                    exerciseJson.put("name", exercise.getName());
-                    exerciseJson.put("totalSets", exercise.getTotalSets());
-                    exerciseJson.put("currentSet", exercise.getCurrentSet());
-                    exerciseJson.put("reps", exercise.getReps());
-                    exerciseJson.put("weight", exercise.getWeight());
-                    exerciseJson.put("restTime", exercise.getRestTime());
-                    exerciseJson.put("isResting", exercise.isResting());
-                    exerciseJson.put("remainingRestTime", exercise.getRemainingRestTime());
-                    exercisesJson.put(exerciseJson);
-                }
-                routineJson.put("exercises", exercisesJson);
-                jsonArray.put(routineJson);
+                jsonArray.put(routine.toJson());
             }
             preferences.edit().putString(KEY_ROUTINES, jsonArray.toString()).apply();
             
@@ -71,7 +54,7 @@ public class RoutineManager {
                     exercise.setTotalSets(exerciseJson.getInt("totalSets"));
                     exercise.setCurrentSet(exerciseJson.getInt("currentSet"));
                     exercise.setReps(exerciseJson.getInt("reps"));
-                    exercise.setWeight(exerciseJson.getDouble("weight"));
+                    exercise.setWeight(exerciseJson.getInt("weight"));
                     exercise.setRestTime(exerciseJson.getLong("restTime"));
                     exercise.setResting(exerciseJson.getBoolean("isResting"));
                     exercise.setRemainingRestTime(exerciseJson.getLong("remainingRestTime"));

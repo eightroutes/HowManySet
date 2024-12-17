@@ -36,7 +36,7 @@ public class ExerciseListAdapter extends RecyclerView.Adapter<ExerciseListAdapte
         Exercise exercise = exercises.get(position);
         holder.exerciseName.setText(exercise.getName());
         holder.exerciseDetails.setText(
-            String.format("%d세트 x %d회 / %.1fkg / 휴식 %ds",
+            String.format("%d세트 x %d회 / %.1fkg / 휴식 %d초",
                 exercise.getTotalSets(),
                 exercise.getReps(),
                 exercise.getWeight(),

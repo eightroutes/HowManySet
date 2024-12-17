@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         // 저장된 루틴들을 불러오고, 마지막으로 사용한 루틴을 설정
         List<Routine> routines = routineManager.loadRoutines();
         if (!routines.isEmpty()) {
-            currentRoutine = routines.get(routines.size() - 1);  // 마지막 루틴을 현재 루틴으로 설정
+            currentRoutine = routines.get(routines.size() - 1);
         }
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -64,10 +64,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        // 기본 프래그먼트 설정
-        if (savedInstanceState == null) {
-            bottomNavigationView.setSelectedItemId(R.id.navigation_workout);
-        }
+        // 앱 시작 시 WorkoutFragment를 기본으로 표시
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.fragment_container, new WorkoutFragment())
+            .commit();
+        bottomNavigationView.setSelectedItemId(R.id.navigation_workout);
     }
 
     public RoutineManager getRoutineManager() {
@@ -79,6 +80,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setCurrentRoutine(Routine routine) {
+        // 기존 루틴의 모든 운동 초기화
+        if (currentRoutine != null) {
+            for (Exercise exercise : currentRoutine.getExercises()) {
+                exercise.resetProgress();
+            }
+        }
+        
         this.currentRoutine = routine;
         // 현재 루틴이 변경될 때마다 저장
         List<Routine> routines = routineManager.loadRoutines();

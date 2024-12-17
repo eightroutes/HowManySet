@@ -18,6 +18,16 @@ public class Exercise {
         this.isResting = false;
     }
 
+    public Exercise(String name, int totalSets, int reps, double weight, long restTime) {
+        this.name = name;
+        this.totalSets = totalSets;
+        this.reps = reps;
+        this.weight = weight;
+        this.restTime = restTime * 1000;
+        this.currentSet = 1;
+        this.isResting = false;
+    }
+
     public String getName() {
         return name;
     }
@@ -46,7 +56,7 @@ public class Exercise {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
     }
 
@@ -117,10 +127,10 @@ public class Exercise {
         Exercise exercise = new Exercise();
         exercise.setName(json.getString("name"));
         exercise.setTotalSets(json.getInt("totalSets"));
-        exercise.setCurrentSet(json.getInt("currentSet"));
         exercise.setReps(json.getInt("reps"));
-        exercise.setWeight(json.getDouble("weight"));
-        exercise.setRestTime(json.getLong("restTime"));
+        exercise.setWeight(json.getInt("weight"));
+        exercise.setRestTime(json.getLong("restTime") / 1000);
+        exercise.setCurrentSet(json.getInt("currentSet"));
         exercise.setResting(json.getBoolean("isResting"));
         exercise.setRemainingRestTime(json.getLong("remainingRestTime"));
         return exercise;

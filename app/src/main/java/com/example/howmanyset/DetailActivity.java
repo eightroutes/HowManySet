@@ -78,7 +78,7 @@ public class DetailActivity extends AppCompatActivity implements ExerciseListAda
                     exercise.setName(editName.getText().toString());
                     exercise.setTotalSets(Integer.parseInt(editSets.getText().toString()));
                     exercise.setReps(Integer.parseInt(editReps.getText().toString()));
-                    exercise.setWeight(Double.parseDouble(editWeight.getText().toString()));
+                    exercise.setWeight(Integer.parseInt(editWeight.getText().toString()));
                     exercise.setRestTime(Integer.parseInt(editRestTime.getText().toString()) * 1000);
                     
                     adapter.notifyItemChanged(position);

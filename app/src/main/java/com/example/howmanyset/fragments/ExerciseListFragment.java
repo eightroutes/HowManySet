@@ -81,6 +81,7 @@ public class ExerciseListFragment extends Fragment implements ExerciseListAdapte
         EditText editReps = dialogView.findViewById(R.id.editReps);
         EditText editWeight = dialogView.findViewById(R.id.editWeight);
         EditText editRestTime = dialogView.findViewById(R.id.editRestTime);
+        MaterialButton btnStartWorkout = rootView.findViewById(R.id.btnStartWorkout);
 
         new AlertDialog.Builder(requireContext())
             .setTitle("운동 추가")
@@ -91,13 +92,15 @@ public class ExerciseListFragment extends Fragment implements ExerciseListAdapte
                     exercise.setName(editName.getText().toString());
                     exercise.setTotalSets(Integer.parseInt(editSets.getText().toString()));
                     exercise.setReps(Integer.parseInt(editReps.getText().toString()));
-                    exercise.setWeight(Double.parseDouble(editWeight.getText().toString()));
+                    exercise.setWeight(Integer.parseInt(editWeight.getText().toString()));
                     exercise.setRestTime(Integer.parseInt(editRestTime.getText().toString()) * 1000);
                     
                     currentRoutine.addExercise(exercise);
                     adapter.notifyItemInserted(currentRoutine.getExercises().size() - 1);
                     
                     ((MainActivity) requireActivity()).setCurrentRoutine(currentRoutine);
+                    
+                    updateStartButtonState(btnStartWorkout);
                 }
             })
             .setNegativeButton("취소", null)
@@ -168,7 +171,7 @@ public class ExerciseListFragment extends Fragment implements ExerciseListAdapte
                     exercise.setName(editName.getText().toString());
                     exercise.setTotalSets(Integer.parseInt(editSets.getText().toString()));
                     exercise.setReps(Integer.parseInt(editReps.getText().toString()));
-                    exercise.setWeight(Double.parseDouble(editWeight.getText().toString()));
+                    exercise.setWeight(Integer.parseInt(editWeight.getText().toString()));
                     exercise.setRestTime(Integer.parseInt(editRestTime.getText().toString()) * 1000);
                     
                     adapter.notifyItemChanged(position);

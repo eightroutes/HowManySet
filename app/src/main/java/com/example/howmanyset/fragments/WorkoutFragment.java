@@ -2,6 +2,8 @@ package com.example.howmanyset.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,7 @@ import com.example.howmanyset.model.Routine;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
-public class WorkoutFragment extends Fragment implements RoutineAdapter.OnItemClickListener {
+public class WorkoutFragment extends Fragment implements RoutineAdapter.ExerciseListener {
     private ViewPager2 viewPager;
     private RoutineAdapter adapter;
     private List<Exercise> exercises;
@@ -27,42 +29,66 @@ public class WorkoutFragment extends Fragment implements RoutineAdapter.OnItemCl
         View view = inflater.inflate(R.layout.fragment_workout, container, false);
         
         viewPager = view.findViewById(R.id.viewPager);
-//        FloatingActionButton fabDetail = view.findViewById(R.id.fabDetail);
         TextView emptyText = view.findViewById(R.id.emptyText);
         
         exercises = ((MainActivity) requireActivity()).getCurrentRoutineExercises();
         
         if (exercises.isEmpty()) {
             viewPager.setVisibility(View.GONE);
-//            fabDetail.setVisibility(View.GONE);
             emptyText.setVisibility(View.VISIBLE);
             emptyText.setText("루틴을 선택해주세요");
         } else {
             viewPager.setVisibility(View.VISIBLE);
-//            fabDetail.setVisibility(View.VISIBLE);
             emptyText.setVisibility(View.GONE);
             
-            adapter = new RoutineAdapter(exercises, this);
+            adapter = new RoutineAdapter(exercises, this, viewPager);
             viewPager.setAdapter(adapter);
         }
-        
-//        fabDetail.setOnClickListener(v -> {
-//            Intent intent = new Intent(requireContext(), DetailActivity.class);
-//            Routine currentRoutine = ((MainActivity) requireActivity()).getCurrentRoutine();
-//            if (currentRoutine != null) {
-//                intent.putExtra("routine_name", currentRoutine.getName());
-//            }
-//            startActivity(intent);
-//        });
         
         return view;
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onSetCompleted(int position) {
         Exercise exercise = exercises.get(position);
         if (!exercise.isResting() && exercise.getCurrentSet() <= exercise.getTotalSets()) {
             adapter.startRest(position);
+        }
+    }
+
+    @Override
+    public void onRestFinished(int position) {
+        Exercise exercise = exercises.get(position);
+        
+        // 모든 세트가 완료되었는지 확인
+        if (exercise.getCurrentSet() > exercise.getTotalSets()) {
+            adapter.notifyItemChanged(position);
+            
+            // 다음 운동으로 이동
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                if (position < exercises.size() - 1) {
+                    viewPager.setCurrentItem(position + 1, true);
+                }
+            }, 800); 
+        } else {
+            adapter.notifyItemChanged(position);
+        }
+    }
+
+    @Override
+    public void onRestSkipped(int position) {
+        Exercise exercise = exercises.get(position);
+        if (exercise.getCurrentSet() > exercise.getTotalSets()) {
+            adapter.notifyItemChanged(position);
+            
+            // 다음 운동으로 이동
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                if (position < exercises.size() - 1) {
+                    viewPager.setCurrentItem(position + 1, true);
+                }
+            }, 800); 
+        } else {
+            adapter.notifyItemChanged(position);
         }
     }
 
