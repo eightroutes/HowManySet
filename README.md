@@ -1,7 +1,6 @@
 # 몇세트 남았지?
 
-Cursor AI로 만든 Android 헬스 어플(학교과제)
-
+심플한 디자인의 헬스 어플
 ![hms1](https://github.com/user-attachments/assets/6ca785d5-d3fc-4ef6-9e8c-289785c86258)
 
 <!-- 스크린샷 다섯 개를 한 줄에 나란히 표현 -->
